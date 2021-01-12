@@ -1,14 +1,16 @@
 # smartbandRE
 
-This is my personal research on how I reversed a smartband and take over it. 
+All original code was moved to the `orig` directory. This repository contains Python3 scripts to control the DT78 smartwatch, based on
 
-The main blog --> https://medium.com/@arunmag/my-journey-towards-reverse-engineering-a-smart-band-bluetooth-le-re-d1dea00e4de2
+https://medium.com/@arunmag/my-journey-towards-reverse-engineering-a-smart-band-bluetooth-le-re-d1dea00e4de2
+
+and on https://github.com/fbiego/DT78
 
 You need a linux laptop with
-1. Bluetooth 4.0 
+1. Bluetooth 4.0
 2. HCI tools
-3. BlueZ 
-4. Python 
+3. BlueZ
+4. Python
 5. PyGATT
 
-Feel free to contact me. 
+Time_Set.py sets the time. Alarms are WiP
