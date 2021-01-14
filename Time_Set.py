@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Manage the DT78 from the command line
+
+Sets the time using the computer's clock
+
 Alarm spec: set|reset timespec [days]
   Omitting days will program a single alarm
   days: day1-day2 makes a range of days
         day1,day2,... selects specific days
+  days are Mo Tu We Th Fr Sa Su
 """
+
 import pygatt
 import time
 import sys
@@ -20,6 +25,12 @@ tspan_re   = re.compile(r'(Mo|Tu|We|Th|Fr|Sa|Su)-(Mo|Tu|We|Th|Fr|Sa|Su)')
 dspecRe    = re.compile(r'^(Mo|Tu|We|Th|Fr|Sa|Su)([-](Mo|Tu|We|Th|Fr|Sa|Su)|(,(Mo|Tu|We|Th|Fr|Sa|Su))+)?$')
 
 weekdays = ['Mo','Tu','We','Th','Fr','Sa','Su']
+__version__ = '1.0'
+
+# Version log
+#
+# v1.0: first working version with time and alarm management
+#       TODO: store the alarm settings for future reference
 
 def bool_flag(val):
     return f'{1 if val else 0:02x}'
@@ -89,7 +100,7 @@ def set_alarm(args,adapter=None):
         # Set single alarm
         #
         day_bits = 0x80
-    cmd = 'AB0008FF738000{bool_flag(action_set)}{action_hour:02x}{action_min:02x}{day_bits:02x}'
+    cmd = 'AB0008FF738000'+bool_flag(action_set)+f'{action_hour:02x}{action_min:02x}{day_bits:02x}'
     send_cmd (cmd, args, adapter=adapter)
 
 def main():
@@ -100,7 +111,7 @@ def main():
                         help='Set 12h mode')
     parser.add_argument('-f', '--find',  dest='find',
                         action='store_true', help='Find the watch before quiting')
-    parser.add_argument('-V', '--verbose',  dest='verbose',
+    parser.add_argument('-v', '--verbose',  dest='verbose',
                         action='store_true', help='Print all info')
     parser.add_argument('-m', '--mac', dest='mac',
                         type=str, default='E8:83:55:62:68:98',
@@ -108,6 +119,8 @@ def main():
     parser.add_argument('-t', '--tx',  dest='tx_channel',
                         type=int, default=0x15,
                         help='The TX channel')
+    parser.add_argument('--version', action='version', version='%(prog)s '+__version__)
+
     parser.add_argument("action", metavar="ACTION",
                         type=str, help="'set' to set the time 'alarm' to manage alarms")
 
