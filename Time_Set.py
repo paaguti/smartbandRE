@@ -49,8 +49,9 @@ def set_time(args,adapter=None):
     cmd1  = f'AB000BFF938000{now.tm_year:04X}{now.tm_mon:02X}{now.tm_mday:02X}'
     cmd1 += f'{now.tm_hour:02X}{now.tm_min:02X}{now.tm_sec:02X}'
 
-    print('Setting time')
     send_cmd(cmd1, args, adapter=adapter)
+    print(f'Setting time to {now.tm_hour}:{now.tm_min:02d}:{now.tm_sec:02d}')
+    print(f'Setting date to {now.tm_mday}/{now.tm_mon:02d}/{now.tm_year:04d}')
 
     cmd2 = f'AB0004FF7C80'+bool_flag(args.set12)
     print(f'Setting {12 if args.set12 else 24}h mode')
